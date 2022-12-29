@@ -1,7 +1,7 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 const gallery = document.querySelector(".gallery");
-console.log(galleryItems.length);
+const galleryImg = document.querySelector(".gallery__image");
 for (let i = 0; i < galleryItems.length; i++) {
   const item = document.createElement("div");
   item.classList.add("gallery__item");
@@ -17,3 +17,21 @@ for (let i = 0; i < galleryItems.length; i++) {
   image.dataset.source = galleryItems[i].original;
   link.append(image);
 }
+
+gallery.addEventListener("click", (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+  const instance = basicLightbox.create(`
+	<img src="${evt.target.dataset.source}" alt="${evt.target.alt}">
+`);
+  if (evt.target.classList.contains("gallery__image")) {
+    instance.show();
+  }
+  if (instance.visible()) {
+    document.addEventListener("keydown", function escapeKey(e) {
+      if (e.key === "Escape") {
+        instance.close();
+      }
+    });
+  }
+});
